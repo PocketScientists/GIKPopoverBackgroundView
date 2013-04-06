@@ -55,43 +55,43 @@ static const CGFloat kSecondHalfRightInset          = 9.0; // Value for .right i
 
 
 /**
- Colors to be used when rendering the popover images. Override these methods in a subclass to provide custom colors.
+ Colors to be used when rendering the popover images. Set values in initWithFrame: in a subclass or use UIAppearance to provide custom colors
  */
-- (UIColor *)popoverBorderColor;
-- (UIColor *)popoverGradientFromColor;
-- (UIColor *)popoverGradientToColor;
+@property (nonatomic, strong) UIColor *popoverBorderColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *popoverGradientFromColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *popoverGradientToColor UI_APPEARANCE_SELECTOR;
 
 /**
- Override these methods in a subclass if you'd rather provide your own images than have them rendered. If your images are different dimensions than the
+ Set values in initWithFrame: in a subclass or use UIAppearance if you'd rather provide your own images than have them rendered. If your images are different dimensions than the
  ones rendered by this class, you will need to override the appropriate size and inset methods as well.
  */
-- (UIImage *)arrowUpImage;
-- (UIImage *)arrowUpRightImage;
-- (UIImage *)arrowDownImage;
-- (UIImage *)arrowDownRightImage;
-- (UIImage *)arrowSideImage;
-- (UIImage *)arrowSideTopImage;
-- (UIImage *)arrowSideBottomImage;
+@property (nonatomic, strong) UIImage *arrowUpImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowUpRightImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowDownImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowDownRightImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowSideImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowSideTopImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *arrowSideBottomImage UI_APPEARANCE_SELECTOR;
 
 /**
- Sizing and inset information to override in your subclass if you provide custom images with different dimensions.
+ Sizing and inset information to set in initWithFrame: in your subclass or use UIAppearance if you provide custom images with different dimensions.
  */
 + (CGFloat)arrowHeight;
 + (CGFloat)arrowBase;
 + (UIEdgeInsets)contentViewInsets;
 
-- (CGFloat)popoverCornerRadius;
-- (CGFloat)sideArrowCenterOffset;
+@property (nonatomic, assign) CGFloat popoverCornerRadius UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) CGFloat sideArrowCenterOffset UI_APPEARANCE_SELECTOR;
 
-- (UIEdgeInsets)arrowUpInsets;
-- (UIEdgeInsets)arrowUpRightInsets;
-- (UIEdgeInsets)arrowDownInsets;
-- (UIEdgeInsets)arrowDownRightInsets;
-- (UIEdgeInsets)arrowSideInsets;
-- (UIEdgeInsets)arrowSideTopInsets;
-- (UIEdgeInsets)arrowSideBottomInsets;
+@property (nonatomic, assign) UIEdgeInsets arrowUpInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowUpRightInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowDownInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowDownRightInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowSideInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowSideTopInsets UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIEdgeInsets arrowSideBottomInsets UI_APPEARANCE_SELECTOR;
 
-- (CGFloat)secondHalfBottomInset;
-- (CGFloat)secondHalfRightInset;
+@property (nonatomic, assign) CGFloat secondHalfBottomInset UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) CGFloat secondHalfRightInset UI_APPEARANCE_SELECTOR;
 
 @end

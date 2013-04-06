@@ -75,7 +75,26 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
     self = [super initWithFrame:frame];
     if (self)
     {
+        // Colors for Rendering
         _popoverBackground = [[UIImageView alloc] initWithFrame:(CGRect){ .origin = CGPointZero, .size = frame.size }];
+        _popoverBorderColor = [UIColor blackColor];
+        _popoverGradientFromColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.8];
+        _popoverGradientToColor = [UIColor darkGrayColor];
+        
+        // Sizing and Insets
+        _popoverCornerRadius = kPopoverCornerRadius;
+        _sideArrowCenterOffset = kSideArrowCenterOffset;
+        
+        _arrowUpInsets = kArrowUpInsets;
+        _arrowUpRightInsets = kArrowUpRightInsets;
+        _arrowDownInsets = kArrowDownInsets;
+        _arrowDownRightInsets = kArrowDownRightInsets;
+        _arrowSideInsets = kArrowSideInsets;
+        _arrowSideTopInsets = kArrowSideTopInsets;
+        _arrowSideBottomInsets = kArrowSideBottomInsets;
+        
+        _secondHalfBottomInset = kSecondHalfBottomInset;
+        _secondHalfRightInset = kSecondHalfRightInset;
         [self addSubview:_popoverBackground];
     }
     return self;
@@ -133,7 +152,7 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-
+    
     CGFloat popoverCornerRadius = [self popoverCornerRadius];
     _popoverExtents = (GIKPopoverExtents){
         .left   = CGRectGetMinX(self.bounds) + popoverCornerRadius,
@@ -149,16 +168,15 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
     self.popoverBackground.center = self.center;
     self.popoverBackground.bounds = self.bounds;
     
-    self.popoverBackground.image = [self wantsUpOrDownArrow] ? [self upOrDownArrowImage] : [self sideArrowImage];    
+    self.popoverBackground.image = [self wantsUpOrDownArrow] ? [self upOrDownArrowImage] : [self sideArrowImage];
 }
-
 
 #pragma mark - Custom Layout
 
 - (CGPathRef)shadowPath
 {
     CGRect pathRect = self.bounds;
-
+    
     CGFloat popoverArrowHeight = [[self class] arrowHeight];
     if ([self wantsUpOrDownArrow])
     {
@@ -236,7 +254,7 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
 
 - (void)adjustCentersIfNecessary
 {
-     // fix centers of left-pointing popovers so that their shadows are drawn correctly.   
+    // fix centers of left-pointing popovers so that their shadows are drawn correctly.
     if (self.arrowDirection == UIPopoverArrowDirectionLeft)
     {
         self.center = (CGPoint){ .x = self.center.x + [GIKPopoverBackgroundView arrowHeight], .y = self.center.y };
@@ -244,99 +262,42 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
     }
 }
 
-#pragma mark - Sizing and Insets
-
-- (CGFloat)popoverCornerRadius
-{
-    return kPopoverCornerRadius;
-}
-
-- (CGFloat)sideArrowCenterOffset
-{
-    return kSideArrowCenterOffset;
-}
-
-- (UIEdgeInsets)arrowUpInsets
-{
-    return kArrowUpInsets;
-}
-
-- (UIEdgeInsets)arrowUpRightInsets
-{
-    return kArrowUpRightInsets;
-}
-
-- (UIEdgeInsets)arrowDownInsets
-{
-    return kArrowDownInsets;
-}
-
-- (UIEdgeInsets)arrowDownRightInsets
-{
-    return kArrowDownRightInsets;
-}
-
-- (UIEdgeInsets)arrowSideInsets
-{
-    return kArrowSideInsets;
-}
-
-- (UIEdgeInsets)arrowSideTopInsets
-{
-    return kArrowSideTopInsets;
-}
-
-- (UIEdgeInsets)arrowSideBottomInsets
-{
-    return kArrowSideBottomInsets;
-}
-
-- (CGFloat)secondHalfBottomInset
-{
-    return kSecondHalfBottomInset;
-}
-
-- (CGFloat)secondHalfRightInset
-{
-    return kSecondHalfRightInset;
-}
-
 #pragma mark - Stretching
 
 - (UIImage *)stretchableImageWithType:(GIKPopoverBackgroundImageType)imageType insets:(UIEdgeInsets)insets mirrored:(BOOL)mirrored
 {
     UIImage *image;
-
+    
     switch (imageType) {
         case kArrowDown:
             image = [self arrowDownImage];
             break;
-
+            
         case kArrowDownRight:
             image = [self arrowDownRightImage];
             break;
-
+            
         case kArrowSide:
             image = [self arrowSideImage];
             break;
-
+            
         case kArrowSideBottom:
             image = [self arrowSideBottomImage];
             break;
-
+            
         case kArrowSideTop:
             image = [self arrowSideTopImage];
             break;
-
+            
         case kArrowUp:
             image = [self arrowUpImage];
             break;
-
+            
         case kArrowUpRight:
             image = [self arrowUpRightImage];
             break;
     }
-
+    
     return (mirrored) ? [[self mirroredImage:image] resizableImageWithCapInsets:[self mirroredInsets:insets]] : [image resizableImageWithCapInsets:insets];
 }
 
@@ -348,27 +309,27 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
         case kArrowDown:
             image = [self arrowDownImage];
             break;
-
+            
         case kArrowDownRight:
             image = [self arrowDownRightImage];
             break;
-
+            
         case kArrowSide:
             image = [self arrowSideImage];
             break;
-
+            
         case kArrowSideBottom:
             image = [self arrowSideBottomImage];
             break;
-
+            
         case kArrowSideTop:
             image = [self arrowSideTopImage];
             break;
-
+            
         case kArrowUp:
             image = [self arrowUpImage];
             break;
-
+            
         case kArrowUpRight:
             image = [self arrowUpRightImage];
             break;
@@ -498,88 +459,102 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
     CGPathAddArcToPoint(path, transform, 17, 1, 17, 8, 7);
     CGPathAddLineToPoint(path, transform, 17, 25);
     CGPathCloseSubpath(path);
-
+    
 }
 
 // Subclass can override these methods to provide custom artwork
 - (UIImage *)arrowUpImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    
-    [self drawUpArrowPopoverImageInPath:path withTransform:NULL];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(57,51)];
-    
-    CGPathRelease(path);
-    return image;
+    if (_arrowUpImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        [self drawUpArrowPopoverImageInPath:path withTransform:NULL];
+        _arrowUpImage = [self imageForPath:path withSize:CGSizeMake(57,51)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowUpImage;
 }
 
 - (UIImage *)arrowUpRightImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-
-    [self drawUpRightArrowPopoverImageInPath:path withTransform:NULL];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(52, 51)];
-
-    CGPathRelease(path);
-    return image;
+    if (_arrowUpImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        [self drawUpRightArrowPopoverImageInPath:path withTransform:NULL];
+        _arrowUpRightImage = [self imageForPath:path withSize:CGSizeMake(52, 51)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowUpRightImage;
 }
 
 - (UIImage *)arrowDownImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 51);
-    
-    [self drawUpArrowPopoverImageInPath:path withTransform:&flip];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(57,51)];
-    
-    CGPathRelease(path);
-    return image;
+    if (_arrowDownImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 51);
+        
+        [self drawUpArrowPopoverImageInPath:path withTransform:&flip];
+        _arrowDownImage = [self imageForPath:path withSize:CGSizeMake(57,51)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowDownImage;
 }
 
 - (UIImage *)arrowDownRightImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 51);
-
-    [self drawUpRightArrowPopoverImageInPath:path withTransform:&flip];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(52,51)];
-
-    CGPathRelease(path);
-    return image;
+    if (_arrowDownRightImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 51);
+        
+        [self drawUpRightArrowPopoverImageInPath:path withTransform:&flip];
+        _arrowDownRightImage = [self imageForPath:path withSize:CGSizeMake(52,51)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowDownRightImage;
 }
 
 - (UIImage *)arrowSideImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-
-    [self drawSideArrowPopoverImageInPath:path withTransform:NULL];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(37, 72)];
-
-    CGPathRelease(path);
-    return image;
+    if (_arrowSideImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        [self drawSideArrowPopoverImageInPath:path withTransform:NULL];
+        _arrowSideImage = [self imageForPath:path withSize:CGSizeMake(37, 72)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowSideImage;
 }
 
 - (UIImage *)arrowSideTopImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 67);
-
-    [self drawSideBottomArrowPopoverImageInPath:path withTransform:&flip];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(37, 67)];
-
-    CGPathRelease(path);
-    return image;
+    if (_arrowSideTopImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, 67);
+        
+        [self drawSideBottomArrowPopoverImageInPath:path withTransform:&flip];
+        _arrowSideTopImage = [self imageForPath:path withSize:CGSizeMake(37, 67)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowSideTopImage;
 }
 
 - (UIImage *)arrowSideBottomImage
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-
-    [self drawSideBottomArrowPopoverImageInPath:path withTransform:NULL];
-    UIImage *image = [self imageForPath:path withSize:CGSizeMake(37, 67)];
-
-    CGPathRelease(path);
-    return image;
+    if (_arrowSideBottomImage == nil) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        [self drawSideBottomArrowPopoverImageInPath:path withTransform:NULL];
+        _arrowSideBottomImage = [self imageForPath:path withSize:CGSizeMake(37, 67)];
+        
+        CGPathRelease(path);
+    }
+    return _arrowSideBottomImage;
 }
 
 
@@ -587,51 +562,33 @@ typedef struct GIKPopoverExtents GIKPopoverExtents;
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
-
+    
     // Draw a gradient
     CGContextAddPath(context, path);
     CGContextClip(context);
-
+    
     CGColorRef colors[] = { [self popoverGradientFromColor].CGColor, [self popoverGradientToColor].CGColor };
     CFArrayRef colorsArray = CFArrayCreate(NULL, (const void**)colors, sizeof(colors) / sizeof(CGColorRef), &kCFTypeArrayCallBacks);
-
+    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, colorsArray, NULL);
     CFRelease(colorSpace);
     CFRelease(colorsArray);
-
+    
     CGPoint gradientStart = CGPointMake(size.width / 2, 0);
     CGPoint gradientEnd = CGPointMake(size.width / 2, size.height);
     CGContextDrawLinearGradient(context, gradient, gradientStart, gradientEnd, 0);
     CGGradientRelease(gradient);
-
+    
     // Draw the border
     [[self popoverBorderColor] setStroke];
     CGContextAddPath(context, path);
     CGContextStrokePath(context);
-
+    
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
+    
     return image;
-}
-
-
-// Subclass can override these methods to provide custom colors
-- (UIColor *)popoverBorderColor
-{
-    return [UIColor blackColor];
-}
-
-- (UIColor *)popoverGradientFromColor
-{
-    // In your subclass, use an alpha of 0.8 to get about the same amount of transparency as the default UIKit popovers
-    return [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.8];
-}
-
-- (UIColor *)popoverGradientToColor
-{
-    return [UIColor darkGrayColor];
 }
 
 @end
